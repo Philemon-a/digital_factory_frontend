@@ -71,7 +71,7 @@ function Tasks({
   const { tasks } = useTasks();
  
   return(
-    <div className="w-full sm:w-[425px] flex-1 bg-white rounded-md overflow-y-scroll">
+    <div className="w-full sm:w-[425px] block p-2.5 flex-1 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 rounded-md overflow-y-scroll">
       {
         tasks && tasks.length > 0 ? tasks.map((task) => (
           <TaskBox setTaskToEdit={setTaskToEdit} key={task._id} task={task} />
@@ -105,3 +105,4 @@ export default function Home() {
     </TasksProvider>
   );
 }
+

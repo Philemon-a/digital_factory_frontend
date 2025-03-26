@@ -39,47 +39,54 @@ function TasksProvider({
     }, []);
 
     const addTask = useCallback(async () => {
+        if (task.length === 0){
+            return
+        }
         try {
             await fetch('http://localhost:4444/add-task', {
                 method: 'POST',
-                credentials: 'include',  // Required for cookies
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ task })
-            }).then(() => setShowAlert(true))
-                .catch(() => alert("Failed to add task"))
-            setShowAlert(false)
+                body: JSON.stringify({ title: task })
+            });
+            setTasks((prev) => [...prev, { _id: Date.now().toString(), title: task, user: 'currentUser' }]);
+            setTask('');
+            triggerAlert('Task added successfully!');
         } catch (error) {
-            console.error(error)
+            console.error(error);
+            triggerAlert('Failed to add task.');
         }
-    }, [task])
+    }, [task, triggerAlert]);
 
     const deleteTask = useCallback(async (task: Task) => {
-        console.log(task)
         try {
-            await fetch(`http://localhost:4444/delete-task/${task._id}/${task.user}`, {
-                method: "DELETE",
-                credentials: 'include',  // Required for cookies
-                headers: { 'Content-Type': 'application/json' },
-            }).then(() => setShowAlert(true))
-                .catch(() => alert("Failed to add task"))
-            setShowAlert(false)
+            await fetch(`http://localhost:4444/delete-task/${task._id}`, {
+                method: 'DELETE'
+            });
+            setTasks((prev) => prev.filter((t) => t._id !== task._id));
+            triggerAlert('Task deleted successfully!');
         } catch (error) {
-            console.error(error)
+            console.error(error);
+            triggerAlert('Failed to delete task.');
         }
-    }, [])
-
+    }, [triggerAlert]);
+    
     const updateTask = useCallback(async (task: Task | undefined) => {
+        if (!task) return;
         try {
-            await fetch(`http://localhost:4444/edit-task/${task?._id}/${task?.user}`, {
-                method: "PUT",
-                credentials: 'include',
+            await fetch(`http://localhost:4444/update-task/${task._id}`, {
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: task?.title })
-            })
+                body: JSON.stringify({ title: task.title })
+            });
+            setTasks((prev) =>
+                prev.map((t) => (t._id === task._id ? { ...t, title: task.title } : t))
+            );
+            triggerAlert('Task updated successfully!');
         } catch (error) {
-            console.error(error)
+            console.error(error);
+            triggerAlert('Failed to update task.');
         }
-    }, [])
+    }, [triggerAlert]);
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -93,21 +100,28 @@ function TasksProvider({
     }, [setTasks])
 
 
-
-    console.log(tasks)
-
     return (
-        <TaskContext value={{
-            tasks,
-            setTasks,
-            task,
-            setTask,
-            addTask,
-            deleteTask,
-            updateTask
-        }}>
+        <TaskContext.Provider
+            value={{
+                tasks,
+                setTasks,
+                task,
+                setTask,
+                addTask,
+                deleteTask,
+                updateTask,
+                showAlert,
+                triggerAlert,
+                alertMessage
+            }}
+        >
             {children}
-        </TaskContext>
+            {showAlert && (
+                <div className="fixed bottom-4 right-4 p-4 bg-green-500 text-white rounded shadow">
+                    {alertMessage}
+                </div>
+            )}
+        </TaskContext.Provider>
     )
 }
 
@@ -136,3 +150,4 @@ export { useTasks, TasksProvider }
         </svg>
     </button>
 </div>
+
