@@ -45,10 +45,11 @@ function TasksProvider({
         try {
             await fetch('http://localhost:4444/add-task', {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title: task })
             });
-            setTasks((prev) => [...prev, { _id: Date.now().toString(), title: task, user: 'currentUser' }]);
+            // setTasks((prev) => [...prev, { _id: Date.now().toString(), title: task, user: 'currentUser' }]);
             setTask('');
             triggerAlert('Task added successfully!');
         } catch (error) {
@@ -60,6 +61,7 @@ function TasksProvider({
     const deleteTask = useCallback(async (task: Task) => {
         try {
             await fetch(`http://localhost:4444/delete-task/${task._id}`, {
+                credentials: 'include',
                 method: 'DELETE'
             });
             setTasks((prev) => prev.filter((t) => t._id !== task._id));
@@ -75,6 +77,7 @@ function TasksProvider({
         try {
             await fetch(`http://localhost:4444/update-task/${task._id}`, {
                 method: 'PUT',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title: task.title })
             });

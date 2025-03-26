@@ -25,7 +25,8 @@ const Auth = () => {
                 credentials: 'include',  // Required for cookies
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
-            }).then(() => router.push('/'))
+            })
+            router.push('/')
         } catch (error) {
             console.error(error)
             setErr("An unexpected error occurred.")
