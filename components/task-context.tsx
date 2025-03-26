@@ -49,7 +49,7 @@ function TasksProvider({
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title: task })
             });
-            // setTasks((prev) => [...prev, { _id: Date.now().toString(), title: task, user: 'currentUser' }]);
+            setTasks((prev) => [...prev, { _id: Date.now().toString(), title: task, user: 'currentUser' }]);
             setTask('');
             triggerAlert('Task added successfully!');
         } catch (error) {
