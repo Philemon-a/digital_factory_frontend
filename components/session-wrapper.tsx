@@ -28,7 +28,7 @@ function SessionWrapper({
 
     const handleLogout = useCallback(async() => {
         try {
-           await fetch("http://localhost:4444/signOut",{
+           await fetch("https://digital-factory-frontend.vercel.app/signOut",{
              credentials: 'include'
            }) 
            router.push('/auth')
@@ -42,7 +42,7 @@ function SessionWrapper({
             setisLoading(true)
             try {
                 // if (pathname.includes('auth')) return
-                const res = await fetch('http://localhost:4444/get-user', {
+                const res = await fetch('https://digital-factory-frontend.vercel.app/get-user', {
                     credentials: 'include'
                 })
                 if (res.status === 401) {

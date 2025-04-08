@@ -20,7 +20,7 @@ const Auth = () => {
         setLoading(true)
         setErr("")
         try {
-            await fetch('http://localhost:4444/signIn', {
+            await fetch('https://digital-factory-frontend.vercel.app/signIn', {
                 method: 'POST',
                 credentials: 'include',  // Required for cookies
                 headers: { 'Content-Type': 'application/json' },
@@ -43,7 +43,7 @@ const Auth = () => {
         setLoading(true)
         setErr("")
         try {
-            await fetch('http://localhost:4444/signUp', {
+            await fetch('https://digital-factory-frontend.vercel.app/signUp', {
                 method: 'POST',
                 credentials: 'include',  // Required for cookies
                 headers: { 'Content-Type': 'application/json' },

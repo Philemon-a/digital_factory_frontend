@@ -43,7 +43,7 @@ function TasksProvider({
             return
         }
         try {
-            await fetch('http://localhost:4444/add-task', {
+            await fetch('https://digital-factory-frontend.vercel.app/add-task', {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -60,7 +60,7 @@ function TasksProvider({
 
     const deleteTask = useCallback(async (task: Task) => {
         try {
-            await fetch(`http://localhost:4444/delete-task/${task._id}`, {
+            await fetch(`https://digital-factory-frontend.vercel.app/delete-task/${task._id}`, {
                 credentials: 'include',
                 method: 'DELETE'
             });
@@ -75,7 +75,7 @@ function TasksProvider({
     const updateTask = useCallback(async (task: Task | undefined) => {
         if (!task) return;
         try {
-            await fetch(`http://localhost:4444/update-task/${task._id}`, {
+            await fetch(`https://digital-factory-frontend.vercel.app/update-task/${task._id}`, {
                 method: 'PUT',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -93,7 +93,7 @@ function TasksProvider({
 
     useEffect(() => {
         const fetchTasks = async () => {
-            await fetch('http://localhost:4444/get-tasks', {
+            await fetch('https://digital-factory-frontend.vercel.app/get-tasks', {
                 credentials: 'include'
             })
                 .then((res) => res.json())
