@@ -28,7 +28,7 @@ function SessionWrapper({
 
     const handleLogout = useCallback(async() => {
         try {
-           await fetch("https://digital-factory-frontend.vercel.app/signOut",{
+           await fetch("https://digitalfactory-041f7d6dfc2c.herokuapp.com/signOut",{
              credentials: 'include'
            }) 
            router.push('/auth')
@@ -42,7 +42,7 @@ function SessionWrapper({
             setisLoading(true)
             try {
                 // if (pathname.includes('auth')) return
-                const res = await fetch('https://digital-factory-frontend.vercel.app/get-user', {
+                const res = await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/get-user', {
                     credentials: 'include'
                 })
                 if (res.status === 401) {

@@ -20,7 +20,7 @@ const Auth = () => {
         setLoading(true)
         setErr("")
         try {
-            await fetch('https://digital-factory-frontend.vercel.app/signIn', {
+            await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/signIn', {
                 method: 'POST',
                 credentials: 'include',  // Required for cookies
                 headers: { 'Content-Type': 'application/json' },
@@ -43,7 +43,7 @@ const Auth = () => {
         setLoading(true)
         setErr("")
         try {
-            await fetch('https://digital-factory-frontend.vercel.app/signUp', {
+            await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/signUp', {
                 method: 'POST',
                 credentials: 'include',  // Required for cookies
                 headers: { 'Content-Type': 'application/json' },

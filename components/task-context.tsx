@@ -43,7 +43,7 @@ function TasksProvider({
             return
         }
         try {
-            await fetch('https://digital-factory-frontend.vercel.app/add-task', {
+            await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/add-task', {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -60,7 +60,7 @@ function TasksProvider({
 
     const deleteTask = useCallback(async (task: Task) => {
         try {
-            await fetch(`https://digital-factory-frontend.vercel.app/delete-task/${task._id}`, {
+            await fetch(`https://digitalfactory-041f7d6dfc2c.herokuapp.com/delete-task/${task._id}`, {
                 credentials: 'include',
                 method: 'DELETE'
             });
@@ -75,7 +75,7 @@ function TasksProvider({
     const updateTask = useCallback(async (task: Task | undefined) => {
         if (!task) return;
         try {
-            await fetch(`https://digital-factory-frontend.vercel.app/update-task/${task._id}`, {
+            await fetch(`https://digitalfactory-041f7d6dfc2c.herokuapp.com/update-task/${task._id}`, {
                 method: 'PUT',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -93,7 +93,7 @@ function TasksProvider({
 
     useEffect(() => {
         const fetchTasks = async () => {
-            await fetch('https://digital-factory-frontend.vercel.app/get-tasks', {
+            await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/get-tasks', {
                 credentials: 'include'
             })
                 .then((res) => res.json())
