@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const url = 'http://localhost:4444';
+export const url = 'https://digitalfactory-041f7d6dfc2c.herokuapp.com/';
 
 export const api = axios.create({
     baseURL: url,
