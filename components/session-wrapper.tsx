@@ -39,13 +39,13 @@ function SessionWrapper({
 
     useEffect(() => {
         const checkAuth = async () => {
-            setisLoading(true)
             try {
-                // if (pathname.includes('auth')) return
+                if (pathname.includes('auth')) return
+                setisLoading(true)
                 const res = await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/get-user', {
                     credentials: 'include'
                 })
-                if (res.status === 401) {
+                if (!res.ok) {
                     router.push('/auth')
                     return
                 }
