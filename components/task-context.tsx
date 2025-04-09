@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import {fetcher } from "@/utils/fetcher";
 
 export interface Task {
     _id: string,
@@ -43,12 +44,7 @@ function TasksProvider({
             return
         }
         try {
-            await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/add-task', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: task })
-            });
+            await fetcher('add-task', 'POST', { title: task });
             setTasks((prev) => [...prev, { _id: Date.now().toString(), title: task, user: 'currentUser' }]);
             setTask('');
             triggerAlert('Task added successfully!');
@@ -60,10 +56,7 @@ function TasksProvider({
 
     const deleteTask = useCallback(async (task: Task) => {
         try {
-            await fetch(`https://digitalfactory-041f7d6dfc2c.herokuapp.com/delete-task/${task._id}`, {
-                credentials: 'include',
-                method: 'DELETE'
-            });
+            await fetcher(`delete-task/${task._id}`, 'DELETE');
             setTasks((prev) => prev.filter((t) => t._id !== task._id));
             triggerAlert('Task deleted successfully!');
         } catch (error) {
@@ -75,12 +68,7 @@ function TasksProvider({
     const updateTask = useCallback(async (task: Task | undefined) => {
         if (!task) return;
         try {
-            await fetch(`https://digitalfactory-041f7d6dfc2c.herokuapp.com/update-task/${task._id}`, {
-                method: 'PUT',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: task.title })
-            });
+            await fetcher(`update-task/${task._id}`, 'PUT', { title: task.title });
             setTasks((prev) =>
                 prev.map((t) => (t._id === task._id ? { ...t, title: task.title } : t))
             );
@@ -90,17 +78,19 @@ function TasksProvider({
             triggerAlert('Failed to update task.');
         }
     }, [triggerAlert]);
-
+    
     useEffect(() => {
         const fetchTasks = async () => {
-            await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/get-tasks', {
-                credentials: 'include'
-            })
-                .then((res) => res.json())
-                .then(data => setTasks(data))
-        }
-        fetchTasks()
-    }, [setTasks])
+            try {
+                const data = await fetcher<Task[]>('get-tasks', 'GET');
+                setTasks(data);
+            } catch (error) {
+                console.error(error);
+                triggerAlert('Failed to fetch tasks.');
+            }
+        };
+        fetchTasks();
+    }, [setTasks, triggerAlert]);
 
 
     return (

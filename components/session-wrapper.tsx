@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { fetcher } from "@/utils/fetcher";
 
 interface User {
     email: string,
@@ -26,40 +27,33 @@ function SessionWrapper({
     const pathname = usePathname();
     const [isLoading, setisLoading] = useState(false)
 
-    const handleLogout = useCallback(async() => {
+    const handleLogout = useCallback(async () => {
         try {
-           await fetch("https://digitalfactory-041f7d6dfc2c.herokuapp.com/signOut",{
-             credentials: 'include'
-           }) 
-           router.push('/auth')
+            await fetcher('signOut', 'GET');
+            router.push('/auth');
         } catch (error) {
             console.error(error);
         }
-    }, [router])
+    }, [router]);
 
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                if (pathname.includes('auth')) return
-                setisLoading(true)
-                const res = await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/get-user', {
-                    credentials: 'include'
-                })
-                if (!res.ok) {
-                    router.push('/auth')
-                    return
-                }
-                router.push('/')
-            
+                if (pathname.includes('auth')) return;
+                setisLoading(true);
+                await fetcher('get-user', 'GET');
+                router.push('/');
             } catch (error) {
-                console.error(error)
-                router.push('/auth')
+                console.error(error);
+                console.error('User not authenticated');
+                router.push('/auth');
             } finally {
-                setisLoading(false)
+                setisLoading(false);
             }
-        }
-        checkAuth()
-    }, [setUser, router, pathname])
+        };
+
+        checkAuth();
+    }, [setUser, router, pathname]);
 
     if (isLoading) {
         return (

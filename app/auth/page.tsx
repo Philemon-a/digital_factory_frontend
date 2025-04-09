@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { fetcher } from '@/utils/fetcher'
 
 const Auth = () => {
     const [email, setEmail] = useState('')
@@ -20,18 +21,15 @@ const Auth = () => {
         setLoading(true)
         setErr("")
         try {
-            await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/signIn', {
-                method: 'POST',
-                credentials: 'include',  // Required for cookies
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            })
-            router.push('/')
+            // Use the fetcher utility for the sign-in request
+            await fetcher('signIn', 'POST', { email, password });
+            router.push('/');
         } catch (error) {
-            console.error(error)
-            setErr("An unexpected error occurred.")
+            console.error(error);
+            setErr("An unexpected error occurred.");
+        } finally {
+            setLoading(false);
         }
-        setLoading(false)
     }
 
     const onSignUp = async () => {
@@ -43,17 +41,13 @@ const Auth = () => {
         setLoading(true)
         setErr("")
         try {
-            await fetch('https://digitalfactory-041f7d6dfc2c.herokuapp.com/signUp', {
-                method: 'POST',
-                credentials: 'include',  // Required for cookies
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, username })
-            })
-            router.push('/')
+            await fetcher('signUp', 'POST', { email, password, username });
+            router.push('/');
         } catch (err) {
-            console.error(err)
-            setErr("Failed to sign up, please try again.")
-            setLoading(false)
+            console.error(err);
+            setErr("Failed to sign up, please try again.");
+        } finally {
+            setLoading(false);
         }
     }
 
