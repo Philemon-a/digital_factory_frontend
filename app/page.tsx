@@ -50,12 +50,13 @@ function TaskBox({
   setTaskToEdit: React.Dispatch<React.SetStateAction<Task | undefined>>
 }) {
   const {deleteTask} = useTasks()
+  console.log(task._id)
 
   return (
     <div className="flex-1 border-b border-b-gray-300 p-3 flex justify-between items-center">
       <h3 className="text-lg font-semibold text-black">{task.title}</h3>
       <div className="flex flex-row items-center gap-2">
-        <button onClick={() => deleteTask(task)}>
+        <button onClick={() => deleteTask(task._id)}>
           <Trash color="red" />
         </button>
         <button onClick={() => setTaskToEdit(task)}>

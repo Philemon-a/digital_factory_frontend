@@ -21,12 +21,8 @@ export async function fetcher<T>(
                 ...headers,
             },
             credentials: 'include',
-            body: body ? JSON.stringify(body): undefined,
-        }) 
-
-    if (!res.ok) {
-        throw new Error('An error occurred while fetching the data.')
-    }
+            body: body ? JSON.stringify(body) : undefined,
+        })
 
     return res.json()
 }

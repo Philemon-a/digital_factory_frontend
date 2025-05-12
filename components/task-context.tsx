@@ -13,7 +13,7 @@ interface TaskProps {
     task: string
     setTask: React.Dispatch<React.SetStateAction<string>>
     addTask: () => Promise<void>
-    deleteTask: (task: Task) => Promise<void>
+    deleteTask: (id: string) => Promise<void>
     updateTask: (task: Task | undefined) => Promise<void>
     showAlert: boolean;
     triggerAlert: (message: string) => void;
@@ -45,19 +45,20 @@ function TasksProvider({
         }
         try {
             await fetcher('add-task', 'POST', { title: task });
-            setTasks((prev) => [...prev, { _id: Date.now().toString(), title: task, user: 'currentUser' }]);
+            window.location.reload();
             setTask('');
             triggerAlert('Task added successfully!');
         } catch (error) {
             console.error(error);
             triggerAlert('Failed to add task.');
         }
-    }, [task, triggerAlert]);
+    }, [ task, triggerAlert]);
 
-    const deleteTask = useCallback(async (task: Task) => {
+    const deleteTask = useCallback(async (id: string) => {
+        console.log(id)
         try {
-            await fetcher(`delete-task/${task._id}`, 'DELETE');
-            setTasks((prev) => prev.filter((t) => t._id !== task._id));
+            await fetcher(`delete-task/${id}`, 'DELETE');
+            window.location.reload();
             triggerAlert('Task deleted successfully!');
         } catch (error) {
             console.error(error);
@@ -68,7 +69,7 @@ function TasksProvider({
     const updateTask = useCallback(async (task: Task | undefined) => {
         if (!task) return;
         try {
-            await fetcher(`update-task/${task._id}`, 'PUT', { title: task.title });
+            await fetcher(`edit-task/${task._id}`, 'PUT', { title: task.title });
             setTasks((prev) =>
                 prev.map((t) => (t._id === task._id ? { ...t, title: task.title } : t))
             );
